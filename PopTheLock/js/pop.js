@@ -80,27 +80,22 @@ if (canvas.getContext) {
     this.couleur = couleur;
     this.radian = 0;
     this.velocite = 0.04;
-
-    this.update = function() {
-      this.radian += this.velocite;
-      this.x = x + Math.cos(this.radian) * 80;
-      this.y = y + Math.sin(this.radian) * 80;
-      this.draw();
-    }
+    this.rotation = 0;
 
     this.draw = function() {
-      ctx.beginPath()
-      // ctx.arc(this.x, this.y, this.rayon, 0 , Math.PI * 2, false);
-      // ctx.fillStyle = this.couleur;
-      // ctx.fill();
-
+      ctx.translate(this.x, this.y);
+      this.rotation++;
+      ctx.rotate((Math.PI / 180) * this.rotation);
       ctx.strokeStyle = this.couleur;
       ctx.lineWidth = 10;
       ctx.lineCap = 'round';
-      ctx.moveTo(this.x, this.y);
-      ctx.lineTo(this.x, this.y+ 10);
+      ctx.beginPath();
+      ctx.moveTo(42, 42);
+      ctx.lineTo(57, 57);
       ctx.stroke();
       ctx.closePath();
+      ctx.rotate((Math.PI / 180) * this.rotation * -1);
+      ctx.translate(-this.x, -this.y);
     }
   }
 
@@ -110,9 +105,14 @@ if (canvas.getContext) {
   }
 
   function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = couleurBackground;
+    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    ctx.fill();
+    drawLock();
+    drawCircle();
+    roulette.draw();
     requestAnimationFrame(animate);
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-    roulette.update();
   }
 
   initRoulette();
