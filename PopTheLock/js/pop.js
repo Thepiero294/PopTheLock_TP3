@@ -1,3 +1,7 @@
+function loadref(time) {
+  setTimeout('location.reload(true);', time);
+}
+
 var canvas = document.getElementById('canvas');
 if (canvas.getContext) {
   var ctx = canvas.getContext('2d');
@@ -18,9 +22,6 @@ if (canvas.getContext) {
 
   drawLock();
   drawCircle();
-  drawRoulette();
-  // updateGame();
-  // drawUnlock();
 
   function drawLock() {
     ctx.beginPath();
@@ -72,38 +73,49 @@ if (canvas.getContext) {
     ctx.stroke();
   }
 
-  // let roulette = {
-  //   couleur: 'red',
-  //   largeur: 10,
-  //   centreX: centreCadenasX,
-  //   centreY: centreCadenasY,
-  //   angle: 0,
-  //   updateRoulette: function() {
-  //     ctx.save();
-  //     ctx.translate(this.centreX, this.centreY);
-  //     ctx.rotate(this.angle);
-  //     ctx.strokeStyle = 'red';
-  //     ctx.lineWidth = this.largeur;
-  //     ctx.lineCap = 'round';
-  //     ctx.lineTo(centreCadenasX, centreCadenasY - 80);
-  //     ctx.stroke();
-  //     ctx.restore();
-  //   }
-  // }
+  function Roulette(x, y, rayon, couleur) {
+    this.x = x;
+    this.y = y;
+    this.rayon = rayon;
+    this.couleur = couleur;
+    this.radian = 0;
+    this.velocite = 0.04;
 
-  function updateGame() {
-    canvas.clear();
-    roulette.angle += 1 * Math.PI / 180;
-    roulette.updateRoulette();
+    this.update = function() {
+      this.radian += this.velocite;
+      this.x = x + Math.cos(this.radian) * 80;
+      this.y = y + Math.sin(this.radian) * 80;
+      this.draw();
+    }
+
+    this.draw = function() {
+      ctx.beginPath()
+      // ctx.arc(this.x, this.y, this.rayon, 0 , Math.PI * 2, false);
+      // ctx.fillStyle = this.couleur;
+      // ctx.fill();
+
+      ctx.strokeStyle = this.couleur;
+      ctx.lineWidth = 10;
+      ctx.lineCap = 'round';
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(this.x, this.y+ 10);
+      ctx.stroke();
+      ctx.closePath();
+    }
   }
 
-  function drawRoulette() {
-    ctx.beginPath();
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 10;
-    ctx.lineCap = 'round';
-    ctx.moveTo(centreCadenasX, centreCadenasY - 60);
-    ctx.lineTo(centreCadenasX, centreCadenasY - 80);
-    ctx.stroke();
+  let roulette;
+  function initRoulette() {
+    roulette = new Roulette(centreCadenasX , centreCadenasY, 5, 'red');
   }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    roulette.update();
+  }
+
+  initRoulette();
+  animate();
+
 }
