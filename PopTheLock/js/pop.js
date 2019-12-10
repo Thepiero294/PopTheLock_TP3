@@ -167,8 +167,7 @@ if (canvas.getContext) {
         etatPartie = etatsPartie.PARTIETERMINÉE;
       } else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
         etatPartie = etatsPartie.PARTIETERMINÉE;
-      }
-       if (compteRestant == 0) {
+      } if (compteRestant == 0) {
         etatPartie = etatsPartie.PARTIERÉUSSIE;
       }
 
