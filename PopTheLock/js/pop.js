@@ -163,11 +163,12 @@ if (canvas.getContext) {
       rondJaune.draw();
       roulette.draw(); // ROUGE
 
-      if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13 && roulette.sens == 1) {
-        etatPartie = etatsPartie.PARTIETERMINÉE;
-      } else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
-        etatPartie = etatsPartie.PARTIETERMINÉE;
-      } if (compteRestant == 0) {
+      // if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13 && roulette.sens == 1) {
+      //   etatPartie = etatsPartie.PARTIETERMINÉE;
+      // } else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
+      //   etatPartie = etatsPartie.PARTIETERMINÉE;
+      // }
+      if (compteRestant == 0) {
         etatPartie = etatsPartie.PARTIERÉUSSIE;
       }
 
@@ -230,7 +231,7 @@ if (canvas.getContext) {
     }
 
     // Verifie s'il y a une difference d'au plus 5 degre entre l'angle de la boule et l'angle du curseur
-    else if (Math.floor(roulette.rotationRapportRondJaune) - rondJaune.rotationDegré >= -10 && Math.floor(roulette.rotationRapportRondJaune) - rondJaune.rotationDegré <= 10) {
+    else if (Math.floor(roulette.rotationRapportRondJaune) - rondJaune.rotationDegré >= -rondJaune.radius && Math.floor(roulette.rotationRapportRondJaune) - rondJaune.rotationDegré <= 10) {
       console.log('ROUGE ' + roulette.rotationRapportRondJaune);
       console.log('JAUNE ' + rondJaune.rotationDegré);
       return true;
@@ -242,6 +243,14 @@ if (canvas.getContext) {
 
   $(window).keypress(function(e) {
     if (e.which === 32) {
+      // A VÉRIFIER QUAND IL POGNE + 360
+      if (roulette.rotationRapportRondJaune + 360 <= rondJaune.rotationDegré + rondJaune.radius && roulette.rotationRapportRondJaune + 360 >= rondJaune.rotationDegré - rondJaune.radius) {
+        roulette.rotationRapportRondJaune += 360;
+      }
+      // A VÉRIFIER QUAND IL POGNE + 360
+      else if( roulette.rotationRapportRondJaune - 360 <= rondJaune.rotationDegré + rondJaune.radius && roulette.rotationRapportRondJaune - 360 >= rondJaune.rotationDegré - rondJaune.radius) {
+        roulette.rotationRapportRondJaune -= 360;
+      }
       if (curseurEstDansBoule()) {
         rondJaune.rotation = Math.PI / 180 * Math.random() * 360;
         roulette.sens *= -1;
