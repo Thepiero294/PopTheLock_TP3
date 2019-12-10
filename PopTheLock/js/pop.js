@@ -78,7 +78,10 @@ if (canvas.getContext) {
     this.draw = function() {
       ctx.translate(this.x, this.y);
       this.rotation += this.sens;
-      this.rotationRapportRondJaune =  (Math.PI / 100) * this.rotation * 57.2958;
+      this.rotationRapportRondJaune =  (Math.PI / 100) * this.rotation * 57.2958 * this.sens;
+      if (this.sens == -1) {
+        this.rotationRapportRondJaune =  360 - (Math.PI / 100) * this.rotation * 57.2958 * this.sens;
+      }
       if (this.rotation < 0) {
         //this.rotation = 360;
       }
@@ -132,7 +135,10 @@ if (canvas.getContext) {
     drawCircle();
     rondJaune.draw();
     roulette.draw();
-    if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13) {
+    if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13 && roulette.sens == 1) {
+      ctx.clearRect();
+    }
+    else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
       ctx.clearRect();
     }
     requestAnimationFrame(animate);
