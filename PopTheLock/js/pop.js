@@ -10,6 +10,16 @@ if (canvas.getContext) {
   const droiteLock = centreCadenasX + 35;
   const debutLigne = 380;
   const finLigne = 440;
+  const etatsPartie = {
+    MENU: 'menu',
+    PARTIEENCOURS: 'partie en cours',
+    PARTIERÉUSSIE: 'partie réussie',
+    TABLEAUSCORE: 'tableau des scores',
+    PARTIETERMINÉE: 'partie terminée'
+  };
+
+  //let etatPartie = etatsPartie.MENU;
+  let etatPartie = etatsPartie.PARTIEENCOURS;
 
   ctx.fillStyle = couleurBackground;
   ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
@@ -127,21 +137,24 @@ if (canvas.getContext) {
   }
 
   function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = couleurBackground;
-    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-    ctx.fill();
-    drawLock();
-    drawCircle();
-    rondJaune.draw();
-    roulette.draw();
-    if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13 && roulette.sens == 1) {
-      ctx.clearRect();
+    if (etatPartie == etatsPartie.PARTIEENCOURS) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = couleurBackground;
+      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+      ctx.fill();
+      drawLock();
+      drawCircle();
+      rondJaune.draw();
+      roulette.draw();
+      if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13 && roulette.sens == 1) {
+        ctx.clearRect();
+      }
+      else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
+        ctx.clearRect();
+      }
+      requestAnimationFrame(animate);
     }
-    else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
-      ctx.clearRect();
-    }
-    requestAnimationFrame(animate);
+
   }
 
   function vibration() {
@@ -167,10 +180,13 @@ if (canvas.getContext) {
   $(window).keypress(function(e) {
     if (e.which === 32) {
       if (estCibleAtteinte()) {
+        rondJaune.rotation = Math.PI / 180 * Math.random() * 360;
         roulette.sens *= -1;
-        compteurNiveau--;
+        //compteurNiveau--;
       }
-      return false;
+      else {
+        etatPartie = etatsPartie.PARTIETERMINÉE;
+      }
     }
     if (e.which === 13) {
       vibration();
