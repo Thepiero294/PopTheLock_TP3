@@ -8,8 +8,19 @@ if (canvas.getContext) {
   const centreCadenasY = 500;
   const gaucheLock = centreCadenasX - 35;
   const droiteLock = centreCadenasX + 35;
-  const debutLigne = 380;
-  const finLigne = 440;
+  let debutLigne = 380;
+  let finLigne = 440;
+  let niveau = 1;
+  let compteRestant = 1;
+  const etatsPartie = {
+    MENU: 'menu',
+    PARTIEENCOURS: 'partie en cours',
+    PARTIERÉUSSIE: 'partie réussie',
+    TABLEAUSCORE: 'tableau des scores',
+    PARTIETERMINÉE: 'partie terminée'
+  };
+
+  let etatPartie = etatsPartie.MENU;
 
   ctx.fillStyle = couleurBackground;
   ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
@@ -57,6 +68,15 @@ if (canvas.getContext) {
       drawCircle();
     }
 
+    ctx.fillStyle = 'white';
+    ctx.font = "30px Cambria";
+    ctx.textAlign = 'center';
+    ctx.fillText("Niveau " + niveau, 100 , 50);
+    ctx.fillStyle = 'white';
+    ctx.font = "50px Cambria";
+    ctx.textAlign = 'center';
+    ctx.fillText(compteRestant, centreCadenasX, centreCadenasY + 12);
+    ctx.fillStyle = couleurBackground;
     requestAnimationFrame(drawUnlock);
   }
 
@@ -80,7 +100,11 @@ if (canvas.getContext) {
       this.rotation += this.sens;
       this.rotationRapportRondJaune = (Math.PI / 100) * this.rotation * 57.2958 * this.sens;
       if (this.sens == -1) {
+<<<<<<< HEAD
         this.rotationRapportRondJaune = 360 - (Math.PI / 100) * this.rotation * 57.2958 * this.sens;
+=======
+        this.rotationRapportRondJaune =  (360 - (Math.PI / 100) * this.rotation * 57.2958) * -this.sens;
+>>>>>>> 16b5ef78ff4c7636b68690488bde8323c4119e97
       }
       if (this.rotation < 0) {
         // this.rotation = 360;
@@ -127,6 +151,7 @@ if (canvas.getContext) {
   }
 
   function animate() {
+<<<<<<< HEAD
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = couleurBackground;
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
@@ -139,8 +164,56 @@ if (canvas.getContext) {
       ctx.clearRect();
     } else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
       ctx.clearRect();
+=======
+    if (etatPartie == etatsPartie.MENU) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = couleurBackground;
+      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight); 
+      ctx.fillStyle = 'white';
+      ctx.font = "25px Cambria";
+      ctx.textAlign = 'center';
+      ctx.fillText("POP THE LOCK ", canvas.width / 2 , 100);
+      ctx.font = "20px Cambria";
+      ctx.fillText("par Pier-Olivier Fontaine et Marc-Antoine Fournier ", canvas.width / 2 , 150);
+      
+      ctx.fillStyle = couleurBackground;
     }
-    requestAnimationFrame(animate);
+    else if (etatPartie == etatsPartie.PARTIEENCOURS) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = couleurBackground;
+      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+      ctx.fill();
+      drawLock();
+      drawCircle();
+      rondJaune.draw();
+      roulette.draw();
+      if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13 && roulette.sens == 1) {
+        etatPartie = etatsPartie.PARTIETERMINÉE;
+      }
+      else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
+        etatPartie = etatsPartie.PARTIETERMINÉE;
+      }
+      
+      if(compteRestant == 0) {
+        etatPartie = etatsPartie.PARTIERÉUSSIE;
+      }
+
+      ctx.fillStyle = 'white';
+      ctx.font = "30px Cambria";
+      ctx.textAlign = 'center';
+      ctx.fillText("Niveau " + niveau, 100 , 50);
+      ctx.fillStyle = 'white';
+      ctx.font = "50px Arial";
+      ctx.textAlign = 'center';
+      ctx.fillText(compteRestant, centreCadenasX, centreCadenasY + 12);
+      requestAnimationFrame(animate);
+>>>>>>> 16b5ef78ff4c7636b68690488bde8323c4119e97
+    }
+    else if (etatPartie == etatsPartie.PARTIERÉUSSIE) {
+      this.drawUnlock();
+      
+    }
+
   }
 
   function vibration() {
@@ -166,13 +239,28 @@ if (canvas.getContext) {
   $(window).keypress(function(e) {
     if (e.which === 32) {
       if (estCibleAtteinte()) {
+        rondJaune.rotation = Math.PI / 180 * Math.random() * 360;
         roulette.sens *= -1;
-        compteurNiveau--;
+        compteRestant--;
       }
-      return false;
+      else {
+        etatPartie = etatsPartie.PARTIETERMINÉE;
+      }
     }
     if (e.which === 13) {
-      vibration();
+      if(etatPartie == etatsPartie.MENU) {
+        etatPartie = etatsPartie.PARTIEENCOURS;
+        animate();
+      }
+      else if (etatPartie == etatPartie.PARTIETERMINÉE) {
+        vibration();
+      }
+      else if (etatPartie == etatsPartie.PARTIERÉUSSIE) {
+        niveau++;
+        compteRestant = niveau;
+        etatPartie = etatsPartie.PARTIEENCOURS;
+        animate();
+      }
       return false;
     }
   });
