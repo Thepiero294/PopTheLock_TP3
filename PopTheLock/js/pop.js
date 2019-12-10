@@ -98,15 +98,7 @@ if (canvas.getContext) {
     this.draw = function() {
       ctx.translate(this.x, this.y);
       this.rotation += this.sens;
-<<<<<<< HEAD
-      this.rotationRapportRondJaune = (Math.PI / 100) * this.rotation * 57.2958 * this.sens;
-      if (this.sens == -1) {
-        this.rotationRapportRondJaune = (360 - (Math.PI / 100) * this.rotation * 57.2958) * -this.sens;
-      }
-      console.log(this.rotationDegré);
-=======
       this.rotationRapportRondJaune = (Math.PI / 100) * this.rotation * 57.2958 * 1;
->>>>>>> a7abd310e5dfb45c958fccf5299aa7d03575f2d5
       ctx.rotate((Math.PI / 100) * this.rotation);
       ctx.strokeStyle = this.couleur;
       ctx.lineWidth = 10;
