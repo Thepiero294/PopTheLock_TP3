@@ -1,20 +1,15 @@
-function loadref(time) {
-  setTimeout('location.reload(true);', time);
-}
-
-var canvas = document.getElementById('canvas');
+const canvas = document.getElementById('canvas');
 if (canvas.getContext) {
-  var ctx = canvas.getContext('2d');
-  var couleurBackground = 'rgba(30, 174, 136, 1)';
-  var couleurCadenas = 'rgba(21, 91, 89, 1)';
-  var couleurLock = 'rgba(6, 34, 65, 1)';
-  var centreCadenasX = 350;
-  var centreCadenasY = 500;
-  var gaucheLock = centreCadenasX - 35;
-  var droiteLock = centreCadenasX + 35;
-  var debutLigne = 380;
-  var finLigne = 440;
-  var angle = 0;
+  const ctx = canvas.getContext('2d');
+  const couleurBackground = 'rgba(30, 174, 136, 1)';
+  const couleurCadenas = 'rgba(21, 91, 89, 1)';
+  const couleurLock = 'rgba(6, 34, 65, 1)';
+  const centreCadenasX = 350;
+  const centreCadenasY = 500;
+  const gaucheLock = centreCadenasX - 35;
+  const droiteLock = centreCadenasX + 35;
+  const debutLigne = 380;
+  const finLigne = 440;
 
   ctx.fillStyle = couleurBackground;
   ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
@@ -68,24 +63,22 @@ if (canvas.getContext) {
   function drawCircle() {
     ctx.beginPath();
     ctx.lineWidth = 30;
-    ctx.arc(centreCadenasX, centreCadenasY, 70, 0, 2 * Math.PI, true)
+    ctx.arc(centreCadenasX, centreCadenasY, 70, 0, 2 * Math.PI, true);
     ctx.strokeStyle = couleurLock;
     ctx.stroke();
   }
 
-  function Roulette(x, y, rayon, couleur) {
+  function Roulette(x, y, couleur) {
     this.x = x;
     this.y = y;
-    this.rayon = rayon;
     this.couleur = couleur;
-    this.radian = 0;
-    this.velocite = 0.04;
     this.rotation = 0;
+    this.sens = 1;
 
     this.draw = function() {
       ctx.translate(this.x, this.y);
-      this.rotation++;
-      ctx.rotate((Math.PI / 180) * this.rotation);
+      this.rotation += this.sens;
+      ctx.rotate((Math.PI / 100) * this.rotation);
       ctx.strokeStyle = this.couleur;
       ctx.lineWidth = 10;
       ctx.lineCap = 'round';
@@ -94,14 +87,34 @@ if (canvas.getContext) {
       ctx.lineTo(57, 57);
       ctx.stroke();
       ctx.closePath();
-      ctx.rotate((Math.PI / 180) * this.rotation * -1);
+      ctx.rotate((Math.PI / 100) * this.rotation * -1);
       ctx.translate(-this.x, -this.y);
-    }
+    };
   }
+
+  const rondJaune = {
+    x: centreCadenasX,
+    y: centreCadenasY,
+    radius: 12,
+    angleDebut: 0,
+    couleur: 'yellow',
+    rotation: Math.PI / 180 * Math.random() * 360,
+    draw: function() {
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.beginPath();
+      ctx.fillStyle = this.couleur;
+      ctx.arc(50, 50, this.radius, this.angleDebut, 2 * Math.PI);
+      ctx.fill();
+      ctx.closePath();
+      ctx.rotate(this.rotation * -1);
+      ctx.translate(-this.x, -this.y);
+    },
+  };
 
   let roulette;
   function initRoulette() {
-    roulette = new Roulette(centreCadenasX , centreCadenasY, 5, 'red');
+    roulette = new Roulette(centreCadenasX, centreCadenasY, 'red');
   }
 
   function animate() {
@@ -111,11 +124,26 @@ if (canvas.getContext) {
     ctx.fill();
     drawLock();
     drawCircle();
+    rondJaune.draw();
     roulette.draw();
     requestAnimationFrame(animate);
   }
 
+  function vibration() {
+    requestAnimationFrame(vibration);
+  }
+
+  $(window).keypress(function(e) {
+    if (e.which === 32) {
+      roulette.sens *= -1;
+      return false;
+    }
+    if (e.which === 13) {
+      vibration();
+      return false;
+    }
+  });
+
   initRoulette();
   animate();
-
 }
