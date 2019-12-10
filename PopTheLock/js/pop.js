@@ -11,7 +11,7 @@ if (canvas.getContext) {
   let debutLigne = 380;
   let finLigne = 440;
   let niveau = 1;
-  let compteRestant = 1;
+  let compteRestant = 4;
   const etatsPartie = {
     MENU: 'menu',
     PARTIEENCOURS: 'partie en cours',
@@ -71,7 +71,7 @@ if (canvas.getContext) {
     ctx.fillStyle = 'white';
     ctx.font = '30px Cambria';
     ctx.textAlign = 'center';
-    ctx.fillText('Niveau' + niveau, 100, 50);
+    ctx.fillText('Niveau ' + niveau, 100, 50);
     ctx.fillStyle = 'white';
     ctx.font = '50px Cambria';
     ctx.textAlign = 'center';
@@ -98,10 +98,7 @@ if (canvas.getContext) {
     this.draw = function() {
       ctx.translate(this.x, this.y);
       this.rotation += this.sens;
-      this.rotationRapportRondJaune = (Math.PI / 100) * this.rotation * 57.2958 * this.sens;
-      if (this.sens == -1) {
-        this.rotationRapportRondJaune = (360 - (Math.PI / 100) * this.rotation * 57.2958) * -this.sens;
-      }
+      this.rotationRapportRondJaune = (Math.PI / 100) * this.rotation * 57.2958 * 1;
       ctx.rotate((Math.PI / 100) * this.rotation);
       ctx.strokeStyle = this.couleur;
       ctx.lineWidth = 10;
@@ -166,11 +163,11 @@ if (canvas.getContext) {
       rondJaune.draw();
       roulette.draw(); // ROUGE
 
-      if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13 && roulette.sens == 1) {
-        etatPartie = etatsPartie.PARTIETERMINÉE;
-      } else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
-        etatPartie = etatsPartie.PARTIETERMINÉE;
-      } if (compteRestant == 0) {
+      //if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13 && roulette.sens == 1) {
+       // etatPartie = etatsPartie.PARTIETERMINÉE;
+      //} else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
+      //  etatPartie = etatsPartie.PARTIETERMINÉE;
+       if (compteRestant == 0) {
         etatPartie = etatsPartie.PARTIERÉUSSIE;
       }
 
