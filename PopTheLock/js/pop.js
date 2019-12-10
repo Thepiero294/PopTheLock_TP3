@@ -130,6 +130,11 @@ if (canvas.getContext) {
   }
 
   function vibration() {
+    ctx.translate(centreCadenasX, centreCadenasY);
+    ctx.rotate(Math.PI / 180 * 10);
+    drawLock();
+    ctx.rotate(Math.PI / 180 * 10 * -1);
+    ctx.translate(-centreCadenasX, -centreCadenasY);
     requestAnimationFrame(vibration);
   }
 
