@@ -17,7 +17,7 @@ if (canvas.getContext) {
     PARTIEENCOURS: 'partie en cours',
     PARTIERÉUSSIE: 'partie réussie',
     TABLEAUSCORE: 'tableau des scores',
-    PARTIETERMINÉE: 'partie terminée'
+    PARTIETERMINÉE: 'partie terminée',
   };
 
   let etatPartie = etatsPartie.MENU;
@@ -69,11 +69,11 @@ if (canvas.getContext) {
     }
 
     ctx.fillStyle = 'white';
-    ctx.font = "30px Cambria";
+    ctx.font = '30px Cambria';
     ctx.textAlign = 'center';
-    ctx.fillText("Niveau " + niveau, 100 , 50);
+    ctx.fillText('Niveau' + niveau, 100, 50);
     ctx.fillStyle = 'white';
-    ctx.font = "50px Cambria";
+    ctx.font = '50px Cambria';
     ctx.textAlign = 'center';
     ctx.fillText(compteRestant, centreCadenasX, centreCadenasY + 12);
     ctx.fillStyle = couleurBackground;
@@ -100,14 +100,7 @@ if (canvas.getContext) {
       this.rotation += this.sens;
       this.rotationRapportRondJaune = (Math.PI / 100) * this.rotation * 57.2958 * this.sens;
       if (this.sens == -1) {
-<<<<<<< HEAD
-        this.rotationRapportRondJaune = 360 - (Math.PI / 100) * this.rotation * 57.2958 * this.sens;
-=======
-        this.rotationRapportRondJaune =  (360 - (Math.PI / 100) * this.rotation * 57.2958) * -this.sens;
->>>>>>> 16b5ef78ff4c7636b68690488bde8323c4119e97
-      }
-      if (this.rotation < 0) {
-        // this.rotation = 360;
+        this.rotationRapportRondJaune = (360 - (Math.PI / 100) * this.rotation * 57.2958) * -this.sens;
       }
       ctx.rotate((Math.PI / 100) * this.rotation);
       ctx.strokeStyle = this.couleur;
@@ -151,69 +144,48 @@ if (canvas.getContext) {
   }
 
   function animate() {
-<<<<<<< HEAD
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = couleurBackground;
-    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-    ctx.fill();
-    drawLock();
-    drawCircle();
-    rondJaune.draw();
-    roulette.draw();
-    if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13 && roulette.sens == 1) {
-      ctx.clearRect();
-    } else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
-      ctx.clearRect();
-=======
     if (etatPartie == etatsPartie.MENU) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = couleurBackground;
-      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight); 
+      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
       ctx.fillStyle = 'white';
-      ctx.font = "25px Cambria";
+      ctx.font = '25px Cambria';
       ctx.textAlign = 'center';
-      ctx.fillText("POP THE LOCK ", canvas.width / 2 , 100);
-      ctx.font = "20px Cambria";
-      ctx.fillText("par Pier-Olivier Fontaine et Marc-Antoine Fournier ", canvas.width / 2 , 150);
-      
+      ctx.fillText('POP THE LOCK ', canvas.width / 2, 100);
+      ctx.font = '20px Cambria';
+      ctx.fillText('par Pier-Olivier Fontaine et Marc-Antoine Fournier ', canvas.width / 2, 150);
       ctx.fillStyle = couleurBackground;
-    }
-    else if (etatPartie == etatsPartie.PARTIEENCOURS) {
+    } else if (etatPartie == etatsPartie.PARTIEENCOURS) {
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = couleurBackground;
       ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
       ctx.fill();
-      drawLock();
-      drawCircle();
+      drawLock(); // Arc
+      drawCircle(); // cercle
       rondJaune.draw();
-      roulette.draw();
+      roulette.draw(); // ROUGE
+
       if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13 && roulette.sens == 1) {
         etatPartie = etatsPartie.PARTIETERMINÉE;
-      }
-      else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
+      } else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
         etatPartie = etatsPartie.PARTIETERMINÉE;
-      }
-      
-      if(compteRestant == 0) {
+      } if (compteRestant == 0) {
         etatPartie = etatsPartie.PARTIERÉUSSIE;
       }
 
       ctx.fillStyle = 'white';
-      ctx.font = "30px Cambria";
+      ctx.font = '30px Cambria';
       ctx.textAlign = 'center';
-      ctx.fillText("Niveau " + niveau, 100 , 50);
+      ctx.fillText('Niveau ' + niveau, 100, 50);
       ctx.fillStyle = 'white';
-      ctx.font = "50px Arial";
+      ctx.font = '50px Arial';
       ctx.textAlign = 'center';
       ctx.fillText(compteRestant, centreCadenasX, centreCadenasY + 12);
       requestAnimationFrame(animate);
->>>>>>> 16b5ef78ff4c7636b68690488bde8323c4119e97
+    } else if (etatPartie == etatsPartie.PARTIERÉUSSIE) {
+      drawUnlock();
     }
-    else if (etatPartie == etatsPartie.PARTIERÉUSSIE) {
-      this.drawUnlock();
-      
-    }
-
   }
 
   function vibration() {
@@ -225,43 +197,76 @@ if (canvas.getContext) {
     requestAnimationFrame(vibration);
   }
 
-  function estCibleAtteinte() {
-    if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune <= 13 &&
-      roulette.rotationRapportRondJaune < rondJaune.rotationDegré) {
+  // function estCibleAtteinte() {
+  //   if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune <= 13 &&
+  //     roulette.rotationRapportRondJaune < rondJaune.rotationDegré) {
+  //     return true;
+  //   } else if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré <= 13 &&
+  //     rondJaune.rotationDegré < roulette.rotationRapportRondJaune) {
+  //     return true;
+  //   } else return false;
+  // }
+
+  function curseurEstDansBoule() {
+    // Verifie la difference entre l'angle de la boule et l'angle du curseur
+    // Ex : Angle Boule est de 50 et le curseur a 45, donc 45 - 50 = -5 BON
+    // MAIS Angle Boule est de 0 et le curseur a 359, donc 359 - 0 = 359 NON
+    // Alors 359 - (0 + 360) = -1
+    if (rondJaune.rotationDegré < 6 && rondJaune.rotationDegré >= 0) {
+      if ((Math.floor(roulette.rotationRapportRondJaune - (360 + rondJaune.rotationDegré)) >= -(7 - 2)) || (Math.floor(roulette.rotationRapportRondJaune) - rondJaune.rotationDegré) <= (7 - 2)) {
+        console.log('ROUGE ' + roulette.rotationRapportRondJaune);
+        console.log('JAUNE ' + rondJaune.rotationDegré);
+        return true;
+      }
+    }
+
+    // Verifie la difference entre l'angle de la boule et l'angle du curseur
+    // Ex : Angle Boule est de 50 et le curseur a 45, donc 45 - 50 = -5 BON
+    // MAIS Angle Boule est de 357 et le curseur a 1, donc 1 - 357 = -356 NON
+    // Alors (1+360) - 357 = 4 BON
+    else if (rondJaune.rotationDegré < 360 && rondJaune.rotationDegré >= 355) {
+      if ((Math.floor(roulette.rotationRapportRondJaune - (rondJaune.rotationDegré)) >= -(7 - 2)) || (Math.floor(roulette.rotationRapportRondJaune + 360) - (rondJaune.rotationDegré)) <= (7 - 2)) {
+        console.log('ROUGE ' + roulette.rotationRapportRondJaune);
+        console.log('JAUNE ' + rondJaune.rotationDegré);
+        return true;
+      }
+    }
+
+    // Verifie s'il y a une difference d'au plus 5 degre entre l'angle de la boule et l'angle du curseur
+    else if (Math.floor(roulette.rotationRapportRondJaune) - rondJaune.rotationDegré >= -10 && Math.floor(roulette.rotationRapportRondJaune) - rondJaune.rotationDegré <= 10) {
+      console.log('ROUGE ' + roulette.rotationRapportRondJaune);
+      console.log('JAUNE ' + rondJaune.rotationDegré);
       return true;
-    } else if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré <= 13 &&
-      rondJaune.rotationDegré < roulette.rotationRapportRondJaune) {
-      return true;
-    } else return false;
+    }
+    console.log('ROUGE ' + roulette.rotationRapportRondJaune);
+    console.log('JAUNE ' + rondJaune.rotationDegré);
+    return false;
   }
 
-
-  $(window).keypress(function(e) {
+  $(window).keypress(function (e) {
     if (e.which === 32) {
-      if (estCibleAtteinte()) {
+      if (curseurEstDansBoule()) {
         rondJaune.rotation = Math.PI / 180 * Math.random() * 360;
         roulette.sens *= -1;
         compteRestant--;
-      }
-      else {
+      } else {
         etatPartie = etatsPartie.PARTIETERMINÉE;
       }
     }
     if (e.which === 13) {
-      if(etatPartie == etatsPartie.MENU) {
+      if (etatPartie == etatsPartie.MENU) {
         etatPartie = etatsPartie.PARTIEENCOURS;
         animate();
-      }
-      else if (etatPartie == etatPartie.PARTIETERMINÉE) {
-        vibration();
-      }
-      else if (etatPartie == etatsPartie.PARTIERÉUSSIE) {
+      } else if (etatPartie == etatPartie.PARTIETERMINÉE) {
+        // vibration();
+      } else if (etatPartie == etatsPartie.PARTIERÉUSSIE) {
+        console.clear();
         niveau++;
         compteRestant = niveau;
         etatPartie = etatsPartie.PARTIEENCOURS;
         animate();
       }
-      return false;
+      // return false;
     }
   });
 
