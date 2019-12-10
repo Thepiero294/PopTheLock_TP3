@@ -102,6 +102,7 @@ if (canvas.getContext) {
       if (this.sens == -1) {
         this.rotationRapportRondJaune = (360 - (Math.PI / 100) * this.rotation * 57.2958) * -this.sens;
       }
+      console.log(this.rotationDegré);
       ctx.rotate((Math.PI / 100) * this.rotation);
       ctx.strokeStyle = this.couleur;
       ctx.lineWidth = 10;
@@ -243,7 +244,7 @@ if (canvas.getContext) {
     return false;
   }
 
-  $(window).keypress(function (e) {
+  $(window).keypress(function(e) {
     if (e.which === 32) {
       if (curseurEstDansBoule()) {
         rondJaune.rotation = Math.PI / 180 * Math.random() * 360;
