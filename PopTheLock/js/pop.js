@@ -163,10 +163,11 @@ if (canvas.getContext) {
       rondJaune.draw();
       roulette.draw(); // ROUGE
 
-      //if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13 && roulette.sens == 1) {
-       // etatPartie = etatsPartie.PARTIETERMINÉE;
-      //} else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
-      //  etatPartie = etatsPartie.PARTIETERMINÉE;
+      if (roulette.rotationRapportRondJaune - rondJaune.rotationDegré > 13 && roulette.sens == 1) {
+        etatPartie = etatsPartie.PARTIETERMINÉE;
+      } else if (rondJaune.rotationDegré - roulette.rotationRapportRondJaune > 13 && roulette.sens == -1) {
+        etatPartie = etatsPartie.PARTIETERMINÉE;
+      }
        if (compteRestant == 0) {
         etatPartie = etatsPartie.PARTIERÉUSSIE;
       }
